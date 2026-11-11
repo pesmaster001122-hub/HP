@@ -1,0 +1,24 @@
+import socket
+import time
+
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+server_socket.bind(('0.0.0.0', 1234))
+
+print("Time Server Running...")
+
+while True:
+    data, addr = server_socket.recvfrom(1024)
+    message = data.decode()
+
+    if message.lower() == "stop":
+        server_socket.sendto("Server stopped".encode(), addr)
+        break
+
+    elif message.lower() == "time":
+        current_time = time.ctime()
+        server_socket.sendto(current_time.encode(), addr)
+
+    else:
+        server_socket.sendto("Invalid request".encode(), addr)
+
+server_socket.close()
