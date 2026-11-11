@@ -1,0 +1,16 @@
+import socket
+
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+server_address = ('127.0.0.1', 1234)
+
+while True:
+    message = input("Enter request (time/stop): ")
+    client_socket.sendto(message.encode(), server_address)
+
+    data, addr = client_socket.recvfrom(1024)
+    print("Server:", data.decode())
+
+    if message.lower() == "stop":
+        break
+
+client_socket.close()
