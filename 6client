@@ -1,0 +1,23 @@
+import socket
+
+client_socket = socket.socket(
+    socket.AF_INET, socket.SOCK_DGRAM
+)
+
+server_address = ('127.0.0.1', 8080)
+
+sentence = input(
+    "Enter a new-generation English sentence: "
+)
+
+client_socket.sendto(
+    sentence.encode(), server_address
+)
+
+data, server_address = client_socket.recvfrom(4096)
+translated_sentence = data.decode()
+
+print("Translated sentence:")
+print(translated_sentence)
+
+client_socket.close()
