@@ -1,0 +1,61 @@
+import socket
+import ast
+
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_address = ('127.0.0.1', 8080)
+
+server_socket.bind(server_address)
+server_socket.listen(1)
+
+print("Server is waiting for connection...")
+connection, address = server_socket.accept()
+print("Client connected:", address)
+
+while True:
+    data = connection.recv(4096)
+
+    if not data:
+        break
+
+    message = data.decode()
+
+    if message.lower() == "exit":
+        print("Client terminated the connection.")
+        break
+
+    matrix = ast.literal_eval(message)
+
+    print("\nReceived Matrix:")
+    for row in matrix:
+        print(row)
+
+    n = len(matrix)
+    is_upper = True
+    is_lower = True
+    is_diagonal = True
+
+    for i in range(n):
+        for j in range(n):
+            if i > j and matrix[i][j] != 0:
+                is_upper = False
+
+            if i < j and matrix[i][j] != 0:
+                is_lower = False
+
+            if i != j and matrix[i][j] != 0:
+                is_diagonal = False
+
+    if is_diagonal:
+        result = "Diagonal Matrix"
+    elif is_upper:
+        result = "Upper Triangular Matrix"
+    elif is_lower:
+        result = "Lower Triangular Matrix"
+    else:
+        result = "Neither Upper nor Lower Triangular Matrix"
+
+    connection.send(result.encode())
+
+connection.close()
+server_socket.close()
+print("Server terminated.")
