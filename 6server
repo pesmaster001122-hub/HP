@@ -1,0 +1,59 @@
+import socket
+
+abbreviations = {
+    "tbh": "to be honest",
+    "idc": "I don't care",
+    "ig": "I guess",
+    "btf": "to be fair",
+    "atm": "at the moment",
+    "irl": "in real life",
+    "lol": "laughing out loud",
+    "asap": "as soon as possible",
+    "omg": "oh my God",
+    "ttyl": "talk to you later",
+    "idk": "I don't know",
+    "nvm": "never mind"
+}
+
+
+def translate(sentence):
+    words = sentence.split()
+    translated_words = []
+
+    for word in words:
+        lower_word = word.lower()
+
+        if lower_word in abbreviations:
+            translated_word = abbreviations[lower_word]
+        else:
+            translated_word = word
+
+        translated_words.append(translated_word)
+
+    translated_sentence = " ".join(translated_words)
+    return translated_sentence
+
+
+server_socket = socket.socket(
+    socket.AF_INET, socket.SOCK_DGRAM
+)
+
+server_address = ('0.0.0.0', 8080)
+server_socket.bind(server_address)
+
+print("UDP Server running...")
+
+data, client_address = server_socket.recvfrom(4096)
+sentence = data.decode()
+
+print("Received sentence:")
+print(sentence)
+
+translated_sentence = translate(sentence)
+
+server_socket.sendto(
+    translated_sentence.encode(), client_address
+)
+
+print("Translated message sent.")
+server_socket.close()
