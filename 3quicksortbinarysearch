@@ -1,0 +1,4 @@
+#include <stdio.h>
+void quick(int a[],int l,int h){if(l>=h)return;int p=a[h],i=l-1;for(int j=l;j<h;j++)if(a[j]<=p){int t=a[++i];a[i]=a[j];a[j]=t;}int t=a[i+1];a[i+1]=a[h];a[h]=t;int q=i+1;quick(a,l,q-1);quick(a,q+1,h);}
+int search(int a[],int n,int x){int l=0,h=n-1;while(l<=h){int m=l+(h-l)/2;if(a[m]==x)return m;if(a[m]<x)l=m+1;else h=m-1;}return -1;}
+int main(){int a[]={34,7,23,32,5,62,32,2},n=8,x;quick(a,0,n-1);printf("Sorted: ");for(int i=0;i<n;i++)printf("%d ",a[i]);printf("\nSearch: ");scanf("%d",&x);int p=search(a,n,x);if(p<0)puts("Not found");else printf("Found at position %d\n",p+1);return 0;}
