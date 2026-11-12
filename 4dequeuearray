@@ -1,0 +1,11 @@
+#include <stdio.h>
+#define N 5
+int q[N],f=-1,r=-1;
+int empty(){return f==-1;}
+int full(){return (r+1)%N==f;}
+void insertF(int x){if(full())puts("Full");else{if(empty())f=r=0;else f=(f-1+N)%N;q[f]=x;}}
+void insertR(int x){if(full())puts("Full");else{if(empty())f=r=0;else r=(r+1)%N;q[r]=x;}}
+void deleteF(){if(empty())puts("Empty");else{printf("Deleted %d\n",q[f]);if(f==r)f=r=-1;else f=(f+1)%N;}}
+void deleteR(){if(empty())puts("Empty");else{printf("Deleted %d\n",q[r]);if(f==r)f=r=-1;else r=(r-1+N)%N;}}
+void display(){if(empty()){puts("Empty");return;}int i=f;while(1){printf("%d ",q[i]);if(i==r)break;i=(i+1)%N;}puts("");}
+int main(){int c,x;while(1){printf("1.InsertF 2.InsertR 3.DeleteF 4.DeleteR 5.Display 6.Exit: ");scanf("%d",&c);switch(c){case 1:scanf("%d",&x);insertF(x);break;case 2:scanf("%d",&x);insertR(x);break;case 3:deleteF();break;case 4:deleteR();break;case 5:display();break;case 6:return 0;default:puts("Invalid");}}}
