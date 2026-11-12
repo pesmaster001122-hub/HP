@@ -1,0 +1,11 @@
+#include <stdio.h>
+#define N 100
+struct Term{int row,col,val;};
+int main(){struct Term a[N],b[N];int count[N]={0},pos[N]={0},r,c,n;
+printf("Rows and columns: ");scanf("%d%d",&r,&c);if(r<=0||c<=0||c>=N)return 1;
+printf("Non-zero terms: ");scanf("%d",&n);if(n<0||n>N-1)return 1;
+a[0]=(struct Term){r,c,n};
+for(int i=1;i<=n;i++){scanf("%d%d%d",&a[i].row,&a[i].col,&a[i].val);if(a[i].row<0||a[i].row>=r||a[i].col<0||a[i].col>=c||a[i].val==0)return 1;count[a[i].col]++;}
+b[0]=(struct Term){c,r,n};if(c>0)pos[0]=1;for(int i=1;i<c;i++)pos[i]=pos[i-1]+count[i-1];
+for(int i=1;i<=n;i++){int k=pos[a[i].col]++;b[k]=(struct Term){a[i].col,a[i].row,a[i].val};}
+printf("Transpose triplets (row col value):\n");for(int i=0;i<=n;i++)printf("%d %d %d\n",b[i].row,b[i].col,b[i].val);return 0;}
